@@ -14,4 +14,5 @@ int main() {
 
     FlatSlice slice(double(1.0));
     slice.calibrate(table);
+    return 0;
 }
