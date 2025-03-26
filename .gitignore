@@ -1,2 +1,5 @@
 .vscode/
 Data/*
+*.o
+bin/*
+Dev/*
