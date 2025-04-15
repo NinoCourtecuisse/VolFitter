@@ -1,7 +1,9 @@
 #include <iostream>
+#include <fstream>
 #include <cmath>
 #include "FlatSlice.h"
 #include "../Utils/Optimization.h"
+#include "../Utils/Utils.h"
 #include <unsupported/Eigen/NonLinearOptimization>
 
 using namespace std;
@@ -34,4 +36,14 @@ void FlatSlice::calibrate(Table& mkt_slice)
     // cout << iv_mkt - iv_model << endl;
     cout << functor.inputs() << endl;
     cout << functor.values() << endl;
+}
+
+void FlatSlice::save(const Eigen::MatrixXd& K, double T, string outputFile) const
+{
+    VectorXd iv_model(this->compute_iv(K, maturity));
+    MatrixXd outputMat(K.size(), 2);
+    outputMat.col(0) = K;
+    outputMat.col(1) = iv_model;
+    vector<string> header({"Strike", "IV"});
+    saveToCSV(outputFile, outputMat, header);
 }

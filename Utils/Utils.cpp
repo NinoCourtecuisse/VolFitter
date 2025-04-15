@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include "Utils.h"
 
 using namespace std;
@@ -31,4 +32,40 @@ MatrixXd vectorToMatrix(const vector<vector<double>>& vec) {
         }
     }
     return matrix;
+}
+
+Eigen::VectorXd linspace(double start, double end, int num) {
+    Eigen::VectorXd v(num);
+    if (num == 1) {
+        v(0) = start;
+    } else {
+        double step = (end - start) / (num - 1);
+        for (int i = 0; i < num; ++i) {
+            v(i) = start + i * step;
+        }
+    }
+    return v;
+}
+
+void saveToCSV(const std::string& filename, const Eigen::MatrixXd& matrix, const std::vector<std::string>& headers) {
+    std::ofstream file(filename);
+    if (file.is_open()) {
+        for (size_t i = 0; i < headers.size(); ++i) {
+            file << headers[i];
+            if (i < headers.size() - 1) file << ",";
+        }
+        file << "\n";
+
+        for (int i = 0; i < matrix.rows(); ++i) {
+            for (int j = 0; j < matrix.cols(); ++j) {
+                file << matrix(i, j);
+                if (j < matrix.cols() - 1) file << ",";
+            }
+            file << "\n";
+        }
+        file.close();
+        std::cout << "Saved to " << filename << std::endl;
+    } else {
+        std::cerr << "Could not open file for writing\n";
+    }
 }

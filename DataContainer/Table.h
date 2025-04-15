@@ -12,6 +12,8 @@ class Table {
         void printHead(int row = 5) const;
         std::vector<std::string> getHeader() const {return header;}
         Eigen::MatrixXd getColumn(std::string col_name) const;
+        double getMin(std::string col_name) const;
+        double getMax(std::string col_name) const;
         int get_n_data() const {return data.rows();}
     private:
         std::array<int, 2> dim;

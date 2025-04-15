@@ -60,3 +60,27 @@ MatrixXd Table::getColumn(string col_name) const
         return MatrixXd(0, 0);
     }
 }
+
+double Table::getMin(std::string col_name) const
+{
+    vector<string>::const_iterator it = find(header.begin(), header.end(), col_name);
+    if (it != header.end()) {
+        int idx = distance(header.begin(), it);
+        return data(all, idx).minCoeff();
+    } else {
+        cerr << "Column " << col_name << " is not in the dataset." << endl;
+        return 0.0;
+    }
+}
+
+double Table::getMax(std::string col_name) const
+{
+    vector<string>::const_iterator it = find(header.begin(), header.end(), col_name);
+    if (it != header.end()) {
+        int idx = distance(header.begin(), it);
+        return data(all, idx).maxCoeff();
+    } else {
+        cerr << "Column " << col_name << " is not in the dataset." << endl;
+        return 0.0;
+    }
+}

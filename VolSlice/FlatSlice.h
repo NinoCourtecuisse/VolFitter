@@ -10,5 +10,6 @@ class FlatSlice: public VolSlice {
 
         Eigen::MatrixXd compute_iv(const Eigen::MatrixXd& K, double T) const;
         void calibrate(Table& mkt_slice);
+        void save(const Eigen::MatrixXd& K, double T, std::string outputFile) const;
     private:
 };
