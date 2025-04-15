@@ -16,7 +16,7 @@ struct Functor
   typedef Eigen::Matrix<Scalar,ValuesAtCompileTime,1> ValueType;
   typedef Eigen::Matrix<Scalar,ValuesAtCompileTime,InputsAtCompileTime> JacobianType;
 
-  int m_inputs, m_values;
+  const int m_inputs, m_values;
 
   Functor() : m_inputs(InputsAtCompileTime), m_values(ValuesAtCompileTime) {}
   Functor(int inputs, int values) : m_inputs(inputs), m_values(values) {}
@@ -27,14 +27,13 @@ struct Functor
 };
 
 struct LstqFunctor: Functor<double> {
-    LstqFunctor(const Table& observed, FlatSlice& slice) 
-        : Functor<double>(slice.get_n_params(), observed.get_n_data()), observed_data(observed), vol_slice(slice) {}
+    LstqFunctor(const Table& observed, VolSlice& slice, double S0, double r);
 
-    int operator()(const Eigen::VectorXd &z, Eigen::VectorXd &fvec) const {
-        fvec = Eigen::MatrixXd::Constant(m_values, int(1), z(0)) - observed_data.getColumn("IV");
-        return 0;
-    }
+    int operator()(const Eigen::VectorXd &z, Eigen::VectorXd &fvec) const;
 
-    const Table& observed_data;
-    FlatSlice& vol_slice;
+    const Eigen::MatrixXd mkt_strikes;
+    const Eigen::MatrixXd mkt_iv;
+    double S0;
+    double r;
+    VolSlice& vol_slice;
 };
